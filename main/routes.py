@@ -41,7 +41,6 @@ def my_id():
 ### register new employee (HR only) ###
 
 @app.route("/register", methods= ['GET','POST'])
-@login_required
 def emp_register():
     form = EmpForm()
     if form.validate_on_submit():
