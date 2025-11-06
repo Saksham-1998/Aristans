@@ -15,6 +15,9 @@ app.config['SECRET_KEY'] = '1d11684039c257cb8d2f9b69'
 db = SQLAlchemy(app)
 bcrypt= Bcrypt(app)
 login_manager = LoginManager(app)
+login_manager.login_view = 'login'        ## without access it will lead to login page
+login_manager.login_message = "Please log in to access the page."
+
 
 
 from main.models import Employee

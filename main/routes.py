@@ -23,22 +23,25 @@ def login():
     return render_template('login.html', form = form)
 
 ### Employee Detail ###
-@login_required
+
 @app.route("/employee_detail")
+@login_required
 def detail():
     return render_template('detail.html')
 
 ### MY ID Detail ###
-@login_required
+
 @app.route("/my_id")
+@login_required
 def my_id():
     return render_template('myid.html')
     
 
 
 ### register new employee (HR only) ###
-@login_required
+
 @app.route("/register", methods= ['GET','POST'])
+@login_required
 def emp_register():
     form = EmpForm()
     if form.validate_on_submit():
