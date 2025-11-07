@@ -47,12 +47,19 @@ def emp_register():
         emp = Employee(empname= form.empname.data,
                        empid= form.empid.data,
                        empemail= form.empemail.data,
-                       password= form.password1.data)
+                       empdep= form.empdep.data,
+                       empdesg= form.empdesg.data,
+                       joindate= form.joindate.data,
+                       empadd= form.empadd.data,
+                       empro= form.empro.data,
+                       password= form.password1.data,
+                       is_admin= form.is_admin.data,
+                       )
         
         db.session.add(emp)
         db.session.commit()
         login_user(emp)
-        flash('Account created successfully! You are LoggedIn ', category='success')
+        flash('Employee added successfully!', category='success')
         return redirect(url_for('detail'))
     
     if form.errors != {}: ##checking error from validation

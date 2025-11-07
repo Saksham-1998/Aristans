@@ -1,5 +1,6 @@
-from flask_login import UserMixin
 from main import db , bcrypt
+from flask_login import UserMixin
+from datetime import datetime
 
 
 class Employee(db.Model, UserMixin):
@@ -7,7 +8,13 @@ class Employee(db.Model, UserMixin):
     empname= db.Column(db.String(length=50),nullable= False)
     empid= db.Column(db.String(length=50),nullable=False, unique= True)
     empemail= db.Column(db.String(length=100), nullable= False)
+    empdep= db.Column(db.String(length=100),nullable= True)
+    empdesg= db.Column(db.String(length=100),nullable=True)
+    joindate= db.Column(db.DateTime, default= datetime.utcnow)
+    empadd= db.Column(db.Text,nullable=True)
+    empro= db.Column(db.String(length=50),nullable=True)
     password_hash= db.Column(db.String(length=100), nullable=False)
+    is_admin= db.Column(db.Boolean, default=False)
 
     @property
     def password(self):

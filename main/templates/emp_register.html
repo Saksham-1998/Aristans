@@ -70,12 +70,36 @@
           {{ form.empemail(class="form-control") }}
         </div>
         <div class="mb-3">
+          {{ form.empdep.label() }}
+          {{ form.empdep(class="form-control") }}
+        </div>
+        <div class="mb-3">
+          {{ form.empdesg.label() }}
+          {{ form.empdesg(class="form-control") }}
+        </div>
+        <div class="mb-3">
+          {{ form.joindate.label() }}
+          {{ form.joindate(class="form-control") }}
+        </div>
+        <div class="mb-3">
+          {{ form.empadd.label() }}
+          {{ form.empadd(class="form-control") }}
+        </div>
+        <div class="mb-3">
+          {{ form.empro.label() }}
+          {{ form.empro(class="form-control") }}
+        </div>
+        <div class="mb-3">
           {{ form.password1.label() }}
           {{ form.password1(class="form-control") }}
         </div>
         <div class="mb-3">
           {{ form.password2.label() }}
           {{ form.password2(class="form-control") }}
+        </div>
+        <div class="form-check mb-3">
+          {{ form.is_admin(class="form-check-input") }}
+          {{ form.is_admin.label(class="form-check-label") }}
         </div>
         <div class="form-group mb-2">
           {{ form.submit(class="btn btn-success") }}
