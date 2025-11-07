@@ -45,8 +45,9 @@ def emp_register():
     form = EmpForm()
     if form.validate_on_submit():
         emp = Employee(empname= form.empname.data,
-                                 empid= form.empid.data,
-                                 password= form.password1.data)
+                       empid= form.empid.data,
+                       empemail= form.empemail.data,
+                       password= form.password1.data)
         
         db.session.add(emp)
         db.session.commit()

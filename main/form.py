@@ -1,13 +1,14 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, ValidationError, Length, EqualTo
+from wtforms.validators import DataRequired, ValidationError, Length, EqualTo, Email
 
 from main.models import Employee
 
 
 class EmpForm(FlaskForm):
     empname= StringField(label="Employee name: ", validators= [DataRequired(), Length(min=2,max=30)])
-    empid= StringField(label="Employee Id: ", validators= [DataRequired(), Length(min=2,max=30)])    
+    empid= StringField(label="Employee Id: ", validators= [DataRequired(), Length(min=2,max=30)])
+    empemail= StringField(label="Employee Email: ", validators=[Email(), DataRequired()])    
     password1= PasswordField(label="Create Password: ", validators=[DataRequired(), Length(min=6)] )
     password2= PasswordField(label="Type Password Again: ", validators=[DataRequired(), EqualTo('password1', message="password didn't match")])
     submit= SubmitField(label="Create Account") 
