@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed, FileField
 from wtforms import StringField, PasswordField, SubmitField, DateField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Length, EqualTo, Email, Optional
 
@@ -6,10 +7,11 @@ from main.models import Employee
 
 
 class EmpForm(FlaskForm):
-    empname= StringField("Employee name: ", validators= [DataRequired(), Length(min=2,max=30)])
-    empid= StringField("Employee Id: ", validators= [DataRequired(), Length(min=2,max=30)])
-    empemail= StringField("Employee Email: ", validators=[Email(), DataRequired()])
-    empdep= SelectField('Department',
+    empname= StringField("Name : ", validators= [DataRequired(), Length(min=2,max=30)])
+    empid= StringField("Employee ID : ", validators= [DataRequired(), Length(min=2,max=30)])
+    empemail= StringField("Email : ", validators=[Email(), DataRequired()])
+    empphone= StringField("Phone Number :", validators=[DataRequired(), Length(min=10, max=10, message="Enter a 10 digit Number!")])
+    empdep= SelectField('Department :',
                         choices=[
                             ('','Select Department'),
                             ('HR','Human Resource'),
@@ -19,14 +21,21 @@ class EmpForm(FlaskForm):
                             ('Marketing','Marketing'),
                             ('Creative','Creative'),
                             ('Operations','Operations'),
-                            ], validators=[DataRequired()])
-    empdesg= StringField("Employee Designation:", validators=[Length(max=100),Optional()])
-    joindate= DateField('Date Joined', format="%d-%m-%Y", validators=[Optional()])
-    empadd= TextAreaField('Address', validators=[Optional()])
-    empro= StringField('Reporting Officer', validators=[Optional()])
-    password1= PasswordField(label="Create Password: ", validators=[DataRequired(), Length(min=6)] )
-    password2= PasswordField(label="Type Password Again: ", validators=[DataRequired(), EqualTo('password1', message="password didn't match")])
-    is_admin= BooleanField('Is Admin?')
+                            ], validators=[DataRequired(message="Please select a department")])
+    empdesg= StringField("Designation :", validators=[Length(max=100),Optional()])
+    joindate= DateField('Date of Joining :', format="%Y-%m-%d", validators=[Optional()])
+    empprob= StringField('Probation Period :',validators=[Optional()])
+    empadd= TextAreaField('Address :', validators=[Optional()])
+    empadhar = StringField('Aadhar Card No.:', validators=[DataRequired(), Length(min=12, max=12, message="Aadhar must be 12 digits!")])
+    emppan = StringField('PAN Card:', validators=[DataRequired(), Length(min=10, max=10, message="PAN must be 10 characters!")])
+    empro= StringField('Reporting Officer :', validators=[Optional()])
+    photo = FileField('Profile Photo :', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')])
+    emp10th = FileField("10th Marksheet:", validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "pdf"], "Images/PDF only")])
+    emp12th = FileField("12th Marksheet:", validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "pdf"], "Images/PDF only")])
+    empgrad = FileField("Graduation Marksheet:", validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "gif", "pdf"], "Images/PDF only")])
+    password1= PasswordField(label="Create Password : ", validators=[DataRequired(), Length(min=6)] )
+    password2= PasswordField(label="", validators=[DataRequired(), EqualTo('password1', message="password didn't match")])
+    is_admin= BooleanField('is Admin?')
     submit= SubmitField(label="Save") 
 
     def validate_empid(self, empid_to_check):

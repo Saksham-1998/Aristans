@@ -11,6 +11,11 @@ os.makedirs(app.instance_path, exist_ok=True)   ## instance folder exist
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'aristan.db')  ## db in instance
 app.config['SECRET_KEY'] = '1d11684039c257cb8d2f9b69'
 
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')  
+UPLOAD_DIR_ABS = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])              
+app.config['UPLOAD_DIR_ABS'] = UPLOAD_DIR_ABS
+
+os.makedirs(UPLOAD_DIR_ABS, exist_ok=True)                                                                                          
 
 db = SQLAlchemy(app)
 bcrypt= Bcrypt(app)
@@ -28,7 +33,7 @@ def load_user(user_id):
 
 with app.app_context():
     db.create_all()
-    print("DB path:", app.config['SQLALCHEMY_DATABASE_URI']) ##path of db
+    print("DB path:", app.config['SQLALCHEMY_DATABASE_URI'])
 
 
 from main import routes

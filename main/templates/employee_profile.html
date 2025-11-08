@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ emp.empname }} — Employee Profile</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --sidebar-width: 200px;
+      --gold: #d4af37;
+      --bg1: #0a0a0a;
+      --bg2: #1a1a1a;
+      --panel: rgba(20, 20, 20, .95);
+      --text: #f5f5f5;
+      --muted: #cfcfcf;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: linear-gradient(145deg, var(--bg1), var(--bg2)) fixed;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: #111;
+      padding: 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      z-index: 1020;
+      box-shadow: 3px 0 10px rgba(212, 175, 55, .15);
+      overflow-y: auto;
+    }
+
+    .sidebar #head {
+      text-align: center;
+      margin-bottom: .75rem;
+    }
+
+    .sidebar #head img {
+      width: 70px;
+      margin-bottom: .5rem;
+      filter: brightness(1.2);
+    }
+
+    .sidebar #head p {
+      margin: 0;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: .5px;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #ccc;
+      text-decoration: none;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-weight: 500;
+      letter-spacing: .3px;
+      transition: background-color .2s, color .2s, transform .2s;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .sidebar a:hover {
+      background: rgba(212, 175, 55, .15);
+      color: var(--gold);
+      transform: translateX(3px);
+    }
+
+    .sidebar .logout {
+      margin-top: auto;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-align: center;
+    }
+
+    .sidebar .logout:hover {
+      background: var(--gold);
+      color: #0a0a0a;
+    }
+
+    main.container {
+      margin-left: calc(var(--sidebar-width) + 16px);
+      padding-top: 24px;
+      padding-bottom: 32px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: var(--gold);
+      letter-spacing: .5px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    .flash-message {
+      position: fixed;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1050;
+      background: rgba(212, 175, 55, .08);
+      color: var(--text);
+      border: 1px solid var(--gold);
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-weight: 500;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(212, 175, 55, .3);
+      transition: opacity .35s, transform .35s;
+      pointer-events: none;
+    }
+
+    .flash-message.hide {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    .card {
+      background: var(--panel);
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 0 18px rgba(212, 175, 55, .15);
+    }
+
+    .card .card-body {
+      padding: 1.25rem;
+    }
+
+    .text-muted {
+      color: var(--muted) !important;
+    }
+
+    .profile-photo {
+      width: 170px;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 50%;
+      background: #0f0f0f;
+      box-shadow: 0 0 0 2px rgba(212, 175, 55, .25);
+    }
+
+    .doc-link a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .doc-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <p class="flash-message">{{ message }}</p>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+  <aside class="sidebar" aria-label="Sidebar">
+    <div id="head">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Mini Logo">
+      <p>Aristan</p>
+    </div>
+
+    <a href="{{ url_for('detail') }}" class="active">Employees</a>
+    <a href="#">Announcement</a>
+    <a href="#">Reports</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+  </aside>
+
+  <main class="container py-4">
+    <h1 class="mb-3">Employee Profile</h1>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="d-flex gap-4 align-items-center flex-wrap">
+          <img class="profile-photo"
+            src="{% if emp.photo %}{{ url_for('static', filename='uploads/' ~ emp.photo) }}{% else %}{{ url_for('static', filename='default-user.png') }}{% endif %}"
+            alt="{{ emp.empname }} photo">
+
+          <div>
+            <h3 class="mb-1">{{ emp.empname }}</h3>
+            <div class="text-muted">
+              {{ emp.empdesg or '—' }}{% if emp.empdep %} • {{ emp.empdep }}{% endif %}
+            </div>
+            <div class="small text-muted">ID: {{ emp.empid }}</div>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row g-3 text-muted">
+          <div class="col-md-6"><strong>Email :</strong> {{ emp.empemail or '—' }}</div>
+          <div class="col-md-6"><strong>Phone Number :</strong> {{ emp.empphone or '—' }}</div>
+
+          <div class="col-md-6"><strong>Department :</strong> {{ emp.empdep or '—' }}</div>
+          <div class="col-md-6"><strong>Designation :</strong> {{ emp.empdesg or '—' }}</div>
+
+          <div class="col-md-6">
+            <strong>Date of Joining :</strong>
+            {% if emp.joindate %}{{ emp.joindate.strftime('%d-%m-%Y') }}{% else %}—{% endif %}
+          </div>
+          <div class="col-md-6"><strong>Probation Period :</strong> {{ emp.empprob or '—' }}</div>
+
+          <div class="col-md-6"><strong>Reporting Officer :</strong> {{ emp.empro or '—' }}</div>
+          <div class="col-md-6"><strong>Role :</strong> {{ 'Admin' if emp.is_admin else 'Employee' }}</div>
+
+          <div class="col-md-6"><strong>Aadhaar :</strong> {{ emp.empadhar or '—' }}</div>
+          <div class="col-md-6"><strong>PAN :</strong> {{ emp.emppan or '—' }}</div>
+
+          <div class="col-12"><strong>Address :</strong> {{ emp.empadd or '—' }}</div>
+        </div>
+
+        <hr>
+
+        <h5 class="mb-2" style="color: var(--gold);">Documents</h5>
+        <div class="row g-2 doc-link">
+          <div class="col-md-4 text-muted">
+            <strong>10th Marksheet:</strong>
+            {% if emp.emp10th %}
+            <a href="{{ url_for('static', filename='uploads/' ~ emp.emp10th) }}" target="_blank"
+              rel="noopener">View</a>
+            {% else %} — {% endif %}
+          </div>
+          <div class="col-md-4 text-muted">
+            <strong>12th Marksheet:</strong>
+            {% if emp.emp12th %}
+            <a href="{{ url_for('static', filename='uploads/' ~ emp.emp12th) }}" target="_blank"
+              rel="noopener">View</a>
+            {% else %} — {% endif %}
+          </div>
+          <div class="col-md-4 text-muted">
+            <strong>Graduation Marksheet:</strong>
+            {% if emp.empgrad %}
+            <a href="{{ url_for('static', filename='uploads/' ~ emp.empgrad) }}" target="_blank"
+              rel="noopener">View</a>
+            {% else %} — {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const messages = document.querySelectorAll(".flash-message");
+      if (messages.length) setTimeout(() => messages.forEach((m) => m.classList.add("hide")), 3000);
+    });
+  </script>
+</body>
+
+</html>
