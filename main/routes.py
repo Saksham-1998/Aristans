@@ -65,18 +65,18 @@ def emp_register():
         empgrad = _save_upload(form.empgrad.data, DOC_EXTS, prefix="msgrad")
 
         emp = Employee(
-            empname=form.empname.data.strip(),
-            empid=form.empid.data.strip(),
-            empemail=form.empemail.data.strip().lower(),
-            empphone=form.empphone.data.strip(),
+            empname=form.empname.data,
+            empid=form.empid.data,
+            empemail=form.empemail.data.lower(),
+            empphone=form.empphone.data,
             emptype=form.emptype.data,
-            empposi=form.empposi.data or None,
+            empposi=form.empposi.data,
             empdep=form.empdep.data,
-            empdesg=form.empdesg.data or None,
+            empdesg=form.empdesg.data,
             joindate=form.joindate.data,
-            empprob=form.empprob.data or None,
-            empadd=form.empadd.data or None,
-            empro=form.empro.data or None,
+            empprob=form.empprob.data,
+            empadd=form.empadd.data,
+            empro=form.empro.data,
             photo=photo_filename,
             empadhar=form.empadhar.data.strip(),
             emppan=(form.emppan.data or "").strip().upper(),
@@ -129,7 +129,7 @@ def detail():
 @login_required
 def employee_profile(emp_id):
     emp = Employee.query.get_or_404(emp_id)
-    return render_template("employee_profile.html", emp=emp)
+    return render_template("employee_profile.html", emp=emp,)
 
 
 ######## Delete Employee  ########
