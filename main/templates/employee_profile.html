@@ -256,26 +256,22 @@
           <div class="col-md-4 text-muted">
             <strong>10th Marksheet:</strong>
             {% if emp.emp10th %}
-            <a href="{{ url_for('static', filename='uploads/' ~ emp.emp10th) }}" target="_blank"
-              rel="noopener">View</a>
+            <a href="{{ url_for('static', filename='uploads/' ~ emp.emp10th) }}" target="_blank" rel="noopener">View</a>
             {% else %} — {% endif %}
           </div>
           <div class="col-md-4 text-muted">
             <strong>12th Marksheet:</strong>
             {% if emp.emp12th %}
-            <a href="{{ url_for('static', filename='uploads/' ~ emp.emp12th) }}" target="_blank"
-              rel="noopener">View</a>
+            <a href="{{ url_for('static', filename='uploads/' ~ emp.emp12th) }}" target="_blank" rel="noopener">View</a>
             {% else %} — {% endif %}
           </div>
           <div class="col-md-4 text-muted">
             <strong>Graduation Marksheet:</strong>
             {% if emp.empgrad %}
-            <a href="{{ url_for('static', filename='uploads/' ~ emp.empgrad) }}" target="_blank"
-              rel="noopener">View</a>
+            <a href="{{ url_for('static', filename='uploads/' ~ emp.empgrad) }}" target="_blank" rel="noopener">View</a>
             {% else %} — {% endif %}
           </div>
         </div>
-
       </div>
     </div>
   </main>
