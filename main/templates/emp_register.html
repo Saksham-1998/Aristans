@@ -269,14 +269,13 @@
 
       <div class="form-row">
         {{ form.empname.label(class="form-label") }}
-        {{ form.empname(class="form-control" + (" is-invalid" if form.empname.errors else ""), placeholder="Enter full
-        name") }}
+        {{ form.empname(class="form-control" + (" is-invalid" if form.empname.errors else ""),) }}
         {% for e in form.empname.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
       </div>
 
       <div class="form-row">
         {{ form.empid.label(class="form-label") }}
-        {{ form.empid(class="form-control" + (" is-invalid" if form.empid.errors else ""), placeholder="Employee ID") }}
+        {{ form.empid(class="form-control" + (" is-invalid" if form.empid.errors else ""),) }}
         {% for e in form.empid.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
       </div>
 
@@ -301,9 +300,30 @@
       </div>
 
       <div class="form-row">
+        {{ form.emptype.label(class="form-label") }}
+        <select name="{{ form.emptype.name }}" id="{{ form.emptype.id }}"
+          class="form-select{{ ' is-invalid' if form.emptype.errors else '' }}" required>
+          <option value="" disabled selected hidden>Select Employment Type</option>
+          {% for value, label in form.emptype.choices %}
+          {% if value %}
+          <option value="{{ value }}" {% if form.emptype.data==value %}selected{% endif %}>{{ label }}</option>
+          {% endif %}
+          {% endfor %}
+        </select>
+        {% for e in form.emptype.errors %}
+        <div class="invalid-feedback">{{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="form-row">
+        {{ form.empposi.label(class="form-label") }}
+        {{ form.empposi(class="form-control" + (" is-invalid" if form.empposierrors else ""),) }}
+        {% for e in form.empdesg.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+      </div>
+
+      <div class="form-row">
         {{ form.empdesg.label(class="form-label") }}
-        {{ form.empdesg(class="form-control" + (" is-invalid" if form.empdesg.errors else ""),
-        placeholder="Designation") }}
+        {{ form.empdesg(class="form-control" + (" is-invalid" if form.empdesg.errors else ""),) }}
         {% for e in form.empdesg.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
       </div>
 
@@ -322,8 +342,7 @@
 
       <div class="form-row">
         {{ form.empadd.label(class="form-label") }}
-        {{ form.empadd(class="form-control" + (" is-invalid" if form.empadd.errors else ""), placeholder="Full Address")
-        }}
+        {{ form.empadd(class="form-control" + (" is-invalid" if form.empadd.errors else ""))}}
         {% for e in form.empadd.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
       </div>
 
@@ -343,8 +362,7 @@
 
       <div class="form-row">
         {{ form.empro.label(class="form-label") }}
-        {{ form.empro(class="form-control" + (" is-invalid" if form.empro.errors else ""), placeholder="Reporting
-        Officer") }}
+        {{ form.empro(class="form-control" + (" is-invalid" if form.empro.errors else "")) }}
         {% for e in form.empro.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
       </div>
 

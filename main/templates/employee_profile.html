@@ -217,35 +217,40 @@
             alt="{{ emp.empname }} photo">
 
           <div>
-            <h3 class="mb-1">{{ emp.empname }}</h3>
+            <h3 class="mb-1"><strong>{{ emp.empname }}</strong></h3>
+            <div class="text-muted"><strong> ID : {{ emp.empid }}</strong> </div>
             <div class="text-muted">
-              {{ emp.empdesg or '—' }}{% if emp.empdep %} • {{ emp.empdep }}{% endif %}
+              {% if emp.empdep %} <strong> {{ emp.empdep }} </strong>{% endif %}
             </div>
-            <div class="small text-muted">ID: {{ emp.empid }}</div>
           </div>
         </div>
 
         <hr>
 
         <div class="row g-3 text-muted">
-          <div class="col-md-6"><strong>Email :</strong> {{ emp.empemail or '—' }}</div>
+          <div class="col-md-6"><strong>Employement Type :</strong> {{ emp.emptype or '—' }}</div>
           <div class="col-md-6"><strong>Phone Number :</strong> {{ emp.empphone or '—' }}</div>
-
-          <div class="col-md-6"><strong>Department :</strong> {{ emp.empdep or '—' }}</div>
+          
+          
           <div class="col-md-6"><strong>Designation :</strong> {{ emp.empdesg or '—' }}</div>
+          <div class="col-md-6"><strong>Email :</strong> {{ emp.empemail or '—' }}</div>         
+          
 
+          <div class="col-md-6"><strong>Position :</strong> {{ emp.empposi or '—' }}</div>
           <div class="col-md-6">
             <strong>Date of Joining :</strong>
             {% if emp.joindate %}{{ emp.joindate.strftime('%d-%m-%Y') }}{% else %}—{% endif %}
           </div>
-          <div class="col-md-6"><strong>Probation Period :</strong> {{ emp.empprob or '—' }}</div>
+
 
           <div class="col-md-6"><strong>Reporting Officer :</strong> {{ emp.empro or '—' }}</div>
-          <div class="col-md-6"><strong>Role :</strong> {{ 'Admin' if emp.is_admin else 'Employee' }}</div>
-
           <div class="col-md-6"><strong>Aadhaar :</strong> {{ emp.empadhar or '—' }}</div>
+          
+
+          <div class="col-md-6"><strong>Probation Period :</strong> {{ emp.empprob or '—' }}</div>
           <div class="col-md-6"><strong>PAN :</strong> {{ emp.emppan or '—' }}</div>
 
+          
           <div class="col-12"><strong>Address :</strong> {{ emp.empadd or '—' }}</div>
         </div>
 

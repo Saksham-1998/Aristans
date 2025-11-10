@@ -1,4 +1,4 @@
-from main import app
+from main import app, routes
 
 
 if __name__=='__main__':
