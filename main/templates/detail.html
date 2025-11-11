@@ -25,7 +25,7 @@
       min-height: 100vh;
       margin: 0;
       color: var(--text);
-      background: linear-gradient(145deg, var(--bg-dark-1), var(--bg-dark-2)) fixed;
+      background: black;
       overflow-x: hidden;
     }
 
@@ -36,11 +36,13 @@
       width: var(--sidebar-width);
       height: 100vh;
       background: #111;
-      padding: 1.25rem .75rem;
+      padding: 1.25rem 1rem;
       display: flex;
       flex-direction: column;
       gap: .5rem;
+      z-index: 1020;
       box-shadow: 3px 0 10px rgba(212, 175, 55, .15);
+      overflow-y: auto;
     }
 
     .sidebar #head {
@@ -55,9 +57,10 @@
     }
 
     .sidebar #head p {
-      font-weight: 600;
-      color: var(--gold);
       margin: 0;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: .5px;
     }
 
     .sidebar a {
@@ -66,12 +69,18 @@
       text-decoration: none;
       padding: 10px 12px;
       border-radius: 8px;
-      transition: background-color .2s, color .2s;
+      font-weight: 500;
+      letter-spacing: .3px;
+      transition: background-color .2s, color .2s, transform .2s;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .sidebar a:hover {
       background: rgba(212, 175, 55, .15);
       color: var(--gold);
+      transform: translateX(3px);
     }
 
     .sidebar .logout {
@@ -85,6 +94,7 @@
       background: var(--gold);
       color: #0a0a0a;
     }
+
 
     main.container {
       margin-left: calc(var(--sidebar-width) + 20px);
@@ -111,15 +121,15 @@
     }
 
     .emp-name {
-      font-weight: 800;
+      font-weight: 600;
       color: #fff;
-      font-size: 1.25rem;
+      font-size: 1.75rem;
     }
 
     .emp-desg,
     .emp-dep,
     .emp-ID {
-      color: #ccc;
+      color: #ffffff;
     }
 
     /* Stars */
@@ -169,7 +179,7 @@
   <aside class="sidebar" aria-label="Sidebar">
     <div id="head">
       <img src="{{ url_for('static', filename='logo.png') }}" alt="Mini Logo">
-      <p>Aristan</p>
+      <h4 style="color: #d4af37 !important;">Aristan</h4>
     </div>
     <a href="{{ url_for('detail') }}" class="active">Employees</a>
     <a href="#">Announcement</a>
@@ -179,8 +189,8 @@
 
   <main class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h1>Employees</h1>
-      <a href="{{ url_for('emp_register') }}" class="btn btn-primary btn-sm">+ Add Employee</a>
+      <h1 style="color: var(--gold);">Employees</h1>
+      <a href="{{ url_for('emp_register') }}" class="btn btn-outline-primary">Add Employee</a>
     </div>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -197,11 +207,10 @@
 
           <div class="card-body">
             <a href="{{ url_for('employee_profile', emp_id=emp.id) }}" class="text-decoration-none text-reset">
-              <div class="emp-name">{{ emp.empname }}</div>
+              <div class="emp-name" style="color: var(--gold);">{{ emp.empname }}</div>
             </a>
-            <div class="emp-desg">{{ emp.empdesg or '—' }}</div>
             <div class="emp-dep">{{ emp.empdep or '—' }}</div>
-            <div class="emp-ID">ID: {{ emp.empid }}</div>
+            <div class="emp-ID">ID : {{ emp.empid }}</div>
 
             <!-- Monthly Rating Form -->
             <form method="POST" action="{{ url_for('rate_employee', emp_id=emp.id) }}" class="mt-2">
