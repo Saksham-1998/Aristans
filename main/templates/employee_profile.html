@@ -18,8 +18,8 @@
       --bg1: #0a0a0a;
       --bg2: #1a1a1a;
       --panel: rgba(20, 20, 20, .95);
-      --text: #f5f5f5;
-      --muted: #cfcfcf;
+      --text: #ffffff;
+      --border: rgba(255, 255, 255, .25);
     }
 
     html,
@@ -27,13 +27,49 @@
       height: 100%;
     }
 
+    /* Page background + default text color */
     body {
       margin: 0;
-      color: var(--text);
-      background: linear-gradient(145deg, var(--bg1), var(--bg2)) fixed;
+      background-color: black;
+      color: var(--text) !important;
       overflow-x: hidden;
     }
 
+    /* Force all common text elements to white for readability */
+    body,
+    p,
+    small,
+    .small,
+    strong,
+    em,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .form-label,
+    .form-control,
+    .form-select,
+    .btn,
+    .btn *,
+    .sidebar a,
+    .card {
+      color: #fff !important;
+    }
+
+    /* Keep gold accents for headings/links */
+    a,
+    .doc-link a {
+      color: var(--gold) !important;
+    }
+
+    a:hover,
+    .doc-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Sidebar */
     .sidebar {
       position: fixed;
       top: 0;
@@ -84,7 +120,7 @@
 
     .sidebar a:hover {
       background: rgba(212, 175, 55, .15);
-      color: var(--gold);
+      color: var(--gold) !important;
       transform: translateX(3px);
     }
 
@@ -102,66 +138,18 @@
 
     main.container {
       margin-left: calc(var(--sidebar-width) + 16px);
-      padding-top: 24px;
-      padding-bottom: 32px;
-    }
-
-    h1,
-    h2,
-    h3 {
-      color: var(--gold);
-      letter-spacing: .5px;
-      margin-bottom: 12px;
-    }
-
-    h1 {
-      font-size: 2rem;
-    }
-
-    h2 {
-      font-size: 1.6rem;
-    }
-
-    h3 {
-      font-size: 1.5rem;
-    }
-
-    .flash-message {
-      position: fixed;
-      top: 5px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1050;
-      background: rgba(212, 175, 55, .08);
-      color: var(--text);
-      border: 1px solid var(--gold);
-      padding: 10px 22px;
-      border-radius: 12px;
-      font-weight: 500;
-      text-align: center;
-      box-shadow: 0 0 15px rgba(212, 175, 55, .3);
-      transition: opacity .35s, transform .35s;
-      pointer-events: none;
-    }
-
-    .flash-message.hide {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-10px);
+      padding: 24px 0 32px
     }
 
     .card {
       background: var(--panel);
       border: none;
       border-radius: 16px;
-      box-shadow: 0 0 18px rgba(212, 175, 55, .15);
+      box-shadow: 0 0 18px rgba(212, 175, 55, .15)
     }
 
     .card .card-body {
-      padding: 1.25rem;
-    }
-
-    .text-muted {
-      color: var(--muted) !important;
+      padding: 1.25rem
     }
 
     .profile-photo {
@@ -170,36 +158,77 @@
       object-fit: cover;
       border-radius: 50%;
       background: #0f0f0f;
-      box-shadow: 0 0 0 2px rgba(212, 175, 55, .25);
+      box-shadow: 0 0 0 2px rgba(212, 175, 55, .25)
     }
 
-    .doc-link a {
-      color: var(--gold);
-      text-decoration: none;
+    /* Tables on dark */
+    .table {
+      color: #fff !important;
     }
 
-    .doc-link a:hover {
-      text-decoration: underline;
+    .table td {
+      color: #fff !important;
+    }
+
+    .table thead th {
+      color: var(--gold) !important;
+      background: transparent !important;
+    }
+
+    .table tbody tr {
+      border-color: var(--border)
+    }
+
+    .table td,
+    .table th {
+      background: transparent
+    }
+
+    .rating-table,
+    .rating-table th,
+    .rating-table td {
+      border: none !important;
+      border-color: transparent !important;
+    }
+
+    .rating-table tbody tr {
+      border-bottom: none !important;
+    }
+
+    .rating-table thead {
+      border-bottom: none !important;
+    }
+
+    /* Stars (view only): filled = gold, empty = black (visible on dark) */
+    .stars {
+      white-space: nowrap;
+      letter-spacing: 2px;
+      font-size: 1.3rem;
+    }
+
+    .stars .filled {
+      color: var(--gold) !important;
+    }
+
+    .stars .empty {
+      color: #000 !important;
+      text-shadow: 0 0 1px rgba(255, 255, 255, .2);
+    }
+
+    /* slight outline so black shows on very dark bg */
+
+    hr {
+      border-color: #d4af37;
     }
   </style>
 </head>
 
 <body>
-
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-  {% for category, message in messages %}
-  <p class="flash-message">{{ message }}</p>
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
-
   <aside class="sidebar" aria-label="Sidebar">
     <div id="head">
       <img src="{{ url_for('static', filename='logo.png') }}" alt="Mini Logo">
-      <p>Aristan</p>
+      <h4 style="color: #d4af37 !important;">Aristan</h4>
     </div>
-
     <a href="{{ url_for('detail') }}" class="active">Employees</a>
     <a href="#">Announcement</a>
     <a href="#">Reports</a>
@@ -207,86 +236,163 @@
   </aside>
 
   <main class="container py-4">
-    <h1 class="mb-3">Employee Profile</h1>
+    <h1 class="mb-3" style="color: var(--gold) !important;">Employee Profile</h1>
 
     <div class="card shadow-sm">
       <div class="card-body">
         <div class="d-flex gap-4 align-items-center flex-wrap">
           <img class="profile-photo"
             src="{% if emp.photo %}{{ url_for('static', filename='uploads/' ~ emp.photo) }}{% else %}{{ url_for('static', filename='default-user.png') }}{% endif %}"
-            alt="{{ emp.empname }} photo">
+            alt="{{ emp.empname }}">
 
           <div>
             <h3 class="mb-1"><strong>{{ emp.empname }}</strong></h3>
-            <div class="text-muted"><strong> ID : {{ emp.empid }}</strong> </div>
-            <div class="text-muted">
-              {% if emp.empdep %} <strong> {{ emp.empdep }} </strong>{% endif %}
+            <div><strong>ID:</strong> {{ emp.empid }}</div>
+            <div>{% if emp.empdep %}<strong>{{ emp.empdep }}</strong>{% endif %}</div>
+
+            <!-- Average Rating -->
+            <div class="mt-2">
+              {% if average_rating %}
+              {% set full = average_rating|round(0, 'floor') %}
+              <span class="stars" aria-label="{{ average_rating|round(2) }} out of 5">
+                {% for i in range(1,6) %}
+                {% if i <= full %}<span class="filled">★</span>{% else %}<span class="empty">★</span>{% endif %}
+              {% endfor %}
+              </span>
+              <small ><span style="color: var(--gold); font-weight: 700;">({{ '%.2f'|format(average_rating) }}/5)</span></small>
+              {% else %}
+              <em>No ratings yet</em>
+              {% endif %}
             </div>
           </div>
         </div>
+        <br>
 
         <hr>
 
-        <div class="row g-3 text-muted">
-          <div class="col-md-6"><strong>Employement Type :</strong> {{ emp.emptype or '—' }}</div>
-          <div class="col-md-6"><strong>Phone Number :</strong> {{ emp.empphone or '—' }}</div>
-          
-          
-          <div class="col-md-6"><strong>Designation :</strong> {{ emp.empdesg or '—' }}</div>
-          <div class="col-md-6"><strong>Email :</strong> {{ emp.empemail or '—' }}</div>         
-          
 
-          <div class="col-md-6"><strong>Position :</strong> {{ emp.empposi or '—' }}</div>
+        <!-- Employee Info -->
+        <div class="row g-3">
+          <div class="col-md-6"><strong>Employment Type : &nbsp;</strong> {{ emp.emptype or '—' }}</div>
+          <div class="col-md-6"><strong>Phone Number : &nbsp;</strong> {{ emp.empphone or '—' }}</div>
+          <div class="col-md-6"><strong>Designation : &nbsp;</strong> {{ emp.empdesg or '—' }}</div>
+          <div class="col-md-6"><strong>Email : &nbsp;</strong> {{ emp.empemail or '—' }}</div>
+          <div class="col-md-6"><strong>Position : &nbsp;</strong> {{ emp.empposi or '—' }}</div>
           <div class="col-md-6">
-            <strong>Date of Joining :</strong>
+            <strong>Date of Joining : &nbsp;</strong>
             {% if emp.joindate %}{{ emp.joindate.strftime('%d-%m-%Y') }}{% else %}—{% endif %}
           </div>
-
-
-          <div class="col-md-6"><strong>Reporting Officer :</strong> {{ emp.empro or '—' }}</div>
-          <div class="col-md-6"><strong>Aadhaar :</strong> {{ emp.empadhar or '—' }}</div>
-          
-
-          <div class="col-md-6"><strong>Probation Period :</strong> {{ emp.empprob or '—' }}</div>
-          <div class="col-md-6"><strong>PAN :</strong> {{ emp.emppan or '—' }}</div>
-
-          
-          <div class="col-12"><strong>Address :</strong> {{ emp.empadd or '—' }}</div>
+          <div class="col-md-6"><strong>Reporting Officer : &nbsp;</strong> {{ emp.empro or '—' }}</div>
+          <div class="col-md-6"><strong>Aadhaar : &nbsp;</strong> {{ emp.empadhar or '—' }}</div>
+          <div class="col-md-6"><strong>Probation Period : &nbsp;</strong> {{ emp.empprob or '—' }}</div>
+          <div class="col-md-6"><strong>PAN : &nbsp;</strong> {{ emp.emppan or '—' }}</div>
+          <div class="col-12"><strong>Address : &nbsp;</strong> {{ emp.empadd or '—' }}</div>
         </div>
+        <br>
 
         <hr>
 
-        <h5 class="mb-2" style="color: var(--gold);">Documents</h5>
+
+
+
+        <!-- Documents -->
+        <h4 class="mb-2"><strong style="color: var(--gold) !important;"> Documents </strong></h4>
+        <br>
         <div class="row g-2 doc-link">
-          <div class="col-md-4 text-muted">
-            <strong>10th Marksheet:</strong>
+          <div class="col-md-4">
+            <strong>10th Marksheet :</strong>
             {% if emp.emp10th %}
             <a href="{{ url_for('static', filename='uploads/' ~ emp.emp10th) }}" target="_blank" rel="noopener">View</a>
             {% else %} — {% endif %}
           </div>
-          <div class="col-md-4 text-muted">
-            <strong>12th Marksheet:</strong>
+          <div class="col-md-4">
+            <strong>12th Marksheet :</strong>
             {% if emp.emp12th %}
             <a href="{{ url_for('static', filename='uploads/' ~ emp.emp12th) }}" target="_blank" rel="noopener">View</a>
             {% else %} — {% endif %}
           </div>
-          <div class="col-md-4 text-muted">
-            <strong>Graduation Marksheet:</strong>
+          <div class="col-md-4">
+            <strong>Graduation Marksheet :</strong>
             {% if emp.empgrad %}
             <a href="{{ url_for('static', filename='uploads/' ~ emp.empgrad) }}" target="_blank" rel="noopener">View</a>
             {% else %} — {% endif %}
           </div>
         </div>
+
+        <br>
+
+        <hr>
+
+
+        <!-- Monthly Ratings -->
+        <h4 class="mb-2"> <strong style="color: var(--gold) !important;"> Monthly Ratings </strong></h4>
+        <br>
+        <div class="table-responsive">
+          <table class="table rating-table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in monthly_ratings %}
+              <tr>
+                <td>{{ "%02d/%d"|format(r.month, r.year) }}</td>
+                <td>
+                  <span class="stars" aria-label="{{ r.score }} out of 5">
+                    {% for i in range(1,6) %}
+                    {% if i <= r.score %}<span class="filled">★</span>{% else %}<span class="empty">★</span>{% endif %}
+                  {% endfor %}
+                  </span>
+                  <small>({{ r.score }}/5)</small>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="2"><em>No monthly ratings yet.</em></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <br>
+
+        <hr>
+
+
+        <!-- Attendance -->
+        <h4 class="mb-2"><strong style="color: var(--gold) !important;">Attendance</strong></h4>
+        <br>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Status</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in recent_att %}
+              <tr>
+                <td>{{ "%02d/%d"|format(a.month, a.year) }}</td>
+                <td>{{ a.status.value }}</td>
+                <td>{{ a.notes or "—" }}</td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="3"><em>No monthly attendance recorded.</em></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
   </main>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const messages = document.querySelectorAll(".flash-message");
-      if (messages.length) setTimeout(() => messages.forEach((m) => m.classList.add("hide")), 3000);
-    });
-  </script>
 </body>
 
 </html>
