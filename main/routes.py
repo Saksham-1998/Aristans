@@ -167,26 +167,38 @@ def rate_employee(emp_id):
 def employee_profile(emp_id):
     emp = Employee.query.get_or_404(emp_id)
 
-    # Monthly ratings history (newest first)
-    monthly_ratings = (Rating.query
-                       .filter_by(employee_id=emp.id)
-                       .order_by(Rating.year.desc(), Rating.month.desc())
-                       .all())
+    # Get selected year (default: current year)
+    selected_year = request.args.get("year", type=int)
+    current_year = date.today().year
+    if not selected_year:
+        selected_year = current_year
 
-    # Average across all months
+    # Average rating (all years)
     avg_val = db.session.query(func.avg(Rating.score)).filter(Rating.employee_id == emp.id).scalar()
     average_rating = float(avg_val) if avg_val is not None else None
 
-    # Attendance view (optional): last 12 months, newest first
+    # Monthly ratings for selected year
+    monthly_ratings = Rating.query.filter_by(employee_id=emp.id, year=selected_year)\
+                        .order_by(Rating.year.desc(), Rating.month.desc()).all()
+
+    # Attendance (still show last 12 months)
     recent_att = (Attendance.query
                   .filter_by(employee_id=emp.id)
                   .order_by(Attendance.year.desc(), Attendance.month.desc())
                   .limit(12).all())
 
+    # List of years that have ratings
+    all_years = db.session.query(Rating.year)\
+                .filter_by(employee_id=emp.id)\
+                .distinct().order_by(Rating.year.desc()).all()
+    available_years = [y[0] for y in all_years]  # convert tuples -> list
+
     return render_template("employee_profile.html",
                            emp=emp,
-                           monthly_ratings=monthly_ratings,
                            average_rating=average_rating,
+                           monthly_ratings=monthly_ratings,
+                           selected_year=selected_year,
+                           available_years=available_years,
                            recent_att=recent_att)
 
 

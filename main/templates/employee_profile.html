@@ -15,58 +15,25 @@
     :root {
       --sidebar-width: 200px;
       --gold: #d4af37;
-      --bg1: #0a0a0a;
-      --bg2: #1a1a1a;
-      --panel: rgba(20, 20, 20, .95);
-      --text: #ffffff;
-      --border: rgba(255, 255, 255, .25);
+      --bg-dark-1: #0a0a0a;
+      --bg-dark-2: #1a1a1a;
+      --panel: rgba(20, 20, 20, 0.95);
+      --text: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     html,
     body {
       height: 100%;
-    }
-
-    /* Page background + default text color */
-    body {
       margin: 0;
-      background-color: black;
-      color: var(--text) !important;
+      color: var(--text);
+      background: #000;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
-    }
-
-    /* Force all common text elements to white for readability */
-    body,
-    p,
-    small,
-    .small,
-    strong,
-    em,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    .form-label,
-    .form-control,
-    .form-select,
-    .btn,
-    .btn *,
-    .sidebar a,
-    .card {
-      color: #fff !important;
-    }
-
-    /* Keep gold accents for headings/links */
-    a,
-    .doc-link a {
-      color: var(--gold) !important;
-    }
-
-    a:hover,
-    .doc-link a:hover {
-      text-decoration: underline;
     }
 
     /* Sidebar */
@@ -97,41 +64,48 @@
       filter: brightness(1.2);
     }
 
-    .sidebar #head p {
+    .sidebar #head h4 {
       margin: 0;
       color: var(--gold);
       font-weight: 600;
       letter-spacing: .5px;
     }
 
+    /* Links */
     .sidebar a {
       display: block;
-      color: #ccc;
+      color: #fff;
       text-decoration: none;
       padding: 10px 12px;
       border-radius: 8px;
       font-weight: 500;
       letter-spacing: .3px;
-      transition: background-color .2s, color .2s, transform .2s;
+      transition: background-color .18s, color .18s, transform .18s;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
-    .sidebar a:hover {
+    .sidebar a:hover,
+    .sidebar a:focus-visible {
       background: rgba(212, 175, 55, .15);
-      color: var(--gold) !important;
+      color: var(--gold);
       transform: translateX(3px);
+      outline: none;
     }
 
+    /* Logout button */
     .sidebar .logout {
       margin-top: auto;
       border: 1px solid var(--gold);
       color: var(--gold);
       text-align: center;
+      padding: .375rem .75rem;
+      border-radius: 8px;
     }
 
-    .sidebar .logout:hover {
+    .sidebar .logout:hover,
+    .sidebar .logout:focus-visible {
       background: var(--gold);
       color: #0a0a0a;
     }
@@ -142,6 +116,7 @@
     }
 
     .card {
+      color: var(--text);
       background: var(--panel);
       border: none;
       border-radius: 16px;
@@ -215,10 +190,67 @@
       text-shadow: 0 0 1px rgba(255, 255, 255, .2);
     }
 
-    /* slight outline so black shows on very dark bg */
+    /* Filter box styling */
+    .filter-box {
+      background: var(--filter-bg);
+      border: 1px solid var(--filter-border);
+      padding: 6px 8px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      min-height: 38px;
+    }
+
+    .filter-box label {
+      margin-bottom: 0;
+      font-size: 0.9rem;
+      color: #d4af37;
+      font-weight: 600;
+      letter-spacing: .2px;
+    }
+
+    .filter-box .form-select {
+      background: transparent;
+      color: #d4af37 !important;
+      border-color: #ffffff14;
+      min-width: 110px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      height: 32px;
+      box-shadow: none;
+    }
+
+    .filter-box .label-inline {
+      white-space: nowrap;
+    }
+
+    .filter-box .form-select option {
+      background-color: #1a1a1a !important;
+    }
+
+    .filter_submit {
+      border: 1px solid var(--gold);
+      border-radius: 5px;
+      background-color:#1a1a1a;
+      color: var(--gold);
+
+    }
+
+    .filter_submit:hover {
+      background: var(--gold);
+      color: #0a0a0a;
+    }
 
     hr {
       border-color: #d4af37;
+    }
+
+    @media (max-width: 575px) {
+      .filter-box {
+        min-width: 100%;
+        justify-content: space-between;
+      }
     }
   </style>
 </head>
@@ -259,7 +291,8 @@
                 {% if i <= full %}<span class="filled">★</span>{% else %}<span class="empty">★</span>{% endif %}
               {% endfor %}
               </span>
-              <small ><span style="color: var(--gold); font-weight: 700;">({{ '%.2f'|format(average_rating) }}/5)</span></small>
+              <small><span style="color: var(--gold); font-weight: 700;">({{ '%.2f'|format(average_rating)
+                  }}/5)</span></small>
               {% else %}
               <em>No ratings yet</em>
               {% endif %}
@@ -269,7 +302,6 @@
         <br>
 
         <hr>
-
 
         <!-- Employee Info -->
         <div class="row g-3">
@@ -291,9 +323,6 @@
         <br>
 
         <hr>
-
-
-
 
         <!-- Documents -->
         <h4 class="mb-2"><strong style="color: var(--gold) !important;"> Documents </strong></h4>
@@ -323,10 +352,28 @@
 
         <hr>
 
-
         <!-- Monthly Ratings -->
-        <h4 class="mb-2"> <strong style="color: var(--gold) !important;"> Monthly Ratings </strong></h4>
+        <div class="d-flex justify-content-between">
+          <h4 class="mb-2">
+            <strong style="color: var(--gold) !important;">
+              Monthly Ratings — {{ selected_year }}
+            </strong>
+          </h4>
+          <form method="GET" action="{{ url_for('employee_profile', emp_id=emp.id) }}" class="filter-box">
+            <label class="label-inline">Year : </label>
+
+            <select name="year" class="form-select form-select-sm" aria-label="Select year">
+              {% for y in available_years %}
+              <option value="{{ y }}" {% if selected_year==y %}selected{% endif %}>{{ y }}</option>
+              {% endfor %}
+            </select>
+
+            <button type="submit" class="filter_submit">Filter</button>
+          </form>
+        </div>
+
         <br>
+
         <div class="table-responsive">
           <table class="table rating-table">
             <thead>
@@ -360,7 +407,6 @@
         <br>
 
         <hr>
-
 
         <!-- Attendance -->
         <h4 class="mb-2"><strong style="color: var(--gold) !important;">Attendance</strong></h4>

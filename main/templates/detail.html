@@ -21,14 +21,22 @@
       --text: #f5f5f5;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
-      min-height: 100vh;
+      height: 100%;
       margin: 0;
       color: var(--text);
-      background: black;
+      background: #000;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
     }
 
+    /* Sidebar */
     .sidebar {
       position: fixed;
       top: 0;
@@ -56,58 +64,66 @@
       filter: brightness(1.2);
     }
 
-    .sidebar #head p {
+    .sidebar #head h4 {
       margin: 0;
       color: var(--gold);
       font-weight: 600;
       letter-spacing: .5px;
     }
 
+    /* Links */
     .sidebar a {
       display: block;
-      color: #ccc;
+      color: #fff;
       text-decoration: none;
       padding: 10px 12px;
       border-radius: 8px;
       font-weight: 500;
       letter-spacing: .3px;
-      transition: background-color .2s, color .2s, transform .2s;
+      transition: background-color .18s, color .18s, transform .18s;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
-    .sidebar a:hover {
+    .sidebar a:hover,
+    .sidebar a:focus-visible {
       background: rgba(212, 175, 55, .15);
       color: var(--gold);
       transform: translateX(3px);
+      outline: none;
     }
 
+    /* Logout button */
     .sidebar .logout {
       margin-top: auto;
       border: 1px solid var(--gold);
       color: var(--gold);
       text-align: center;
+      padding: .375rem .75rem;
+      border-radius: 8px;
     }
 
-    .sidebar .logout:hover {
+    .sidebar .logout:hover,
+    .sidebar .logout:focus-visible {
       background: var(--gold);
       color: #0a0a0a;
     }
 
-
+    /* Main container */
     main.container {
       margin-left: calc(var(--sidebar-width) + 20px);
       padding-top: 24px;
       padding-bottom: 32px;
     }
 
+    /* Employee card */
     .emp-card {
       background: var(--panel);
       border-radius: 16px;
       box-shadow: 0 0 18px rgba(212, 175, 55, .15);
       overflow: hidden;
-      transition: transform .2s;
+      transition: transform .18s;
     }
 
     .emp-card:hover {
@@ -120,19 +136,55 @@
       object-fit: cover;
     }
 
+    /* Name + small fields */
     .emp-name {
       font-weight: 600;
       color: #fff;
       font-size: 1.75rem;
     }
 
-    .emp-desg,
     .emp-dep,
     .emp-ID {
-      color: #ffffff;
+      color: #fff;
     }
 
-    /* Stars */
+    /* Buttons (shared) */
+    .btn-custom {
+      border: 1px solid var(--gold);
+      border-radius: 5px;
+      background-color: #0a0a0a;
+      color: var(--gold);
+      text-decoration: none;
+      padding: .25rem .6rem;
+      display: inline-block;
+      font-size: .9rem;
+      line-height: 1;
+    }
+
+    .btn-custom:hover,
+    .btn-custom:focus-visible {
+      background: var(--gold);
+      color: #0a0a0a;
+      text-decoration: none;
+      outline: none;
+    }
+
+
+
+    /* Rating form */
+    .rating_box .form-select {
+      background: transparent;
+      color: #fff;
+      border-color: rgba(212, 175, 55, .36);
+      box-shadow: none;
+    }
+
+    /* Ensure options are readable in dark backgrounds */
+    .rating_box .form-select option {
+      background-color: #1a1a1a;
+    }
+
+    /* Rating stars (RTL technique retained) */
     .rating-stars {
       display: inline-flex;
       direction: rtl;
@@ -149,7 +201,7 @@
       color: #666;
       user-select: none;
       line-height: 1;
-      transition: transform .1s, color .1s;
+      transition: transform .08s, color .08s;
     }
 
     .rating-stars label::before {
@@ -164,6 +216,38 @@
 
     .rating-stars input[type="radio"]:checked~label {
       color: var(--gold);
+    }
+
+
+    /* Flash message fade (keeps the script behavior) */
+    .flash-message {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, .7);
+      color: #fff;
+      padding: .5rem .75rem;
+      border-radius: 6px;
+      z-index: 1100;
+    }
+
+    /* Accessibility: visible focus */
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, .18);
+      border-radius: 6px;
+    }
+
+    /* Respect user motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+
+      .emp-card,
+      .sidebar a {
+        transition: none !important;
+        transform: none !important;
+      }
     }
   </style>
 </head>
@@ -213,10 +297,19 @@
             <div class="emp-ID">ID : {{ emp.empid }}</div>
 
             <!-- Monthly Rating Form -->
-            <form method="POST" action="{{ url_for('rate_employee', emp_id=emp.id) }}" class="mt-2">
+            <form method="POST" action="{{ url_for('rate_employee', emp_id=emp.id) }}" class="rating_box mt-2">
               {{ form.hidden_tag() }}
 
-              <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+              <div class="d-flex justify-content-between gap-3 mb-1">
+                <!-- Year (current year +/- 2) -->
+                {% set sel_year = (form.year.data or current_year)|int %}
+                <select name="year" class="form-select form-select-sm w-auto">
+                  {% for y in range(current_year-2, current_year+3) %}
+                  <option value="{{ y }}" {% if sel_year==y %}selected{% endif %}>{{ y }}</option>
+                  {% endfor %}
+                </select>
+
+
                 <!-- Month -->
                 {% set sel_month = (form.month.data or current_month)|int %}
                 <select name="month" class="form-select form-select-sm w-auto">
@@ -227,13 +320,6 @@
                   {% endfor %}
                 </select>
 
-                <!-- Year (current year +/- 2) -->
-                {% set sel_year = (form.year.data or current_year)|int %}
-                <select name="year" class="form-select form-select-sm w-auto">
-                  {% for y in range(current_year-2, current_year+3) %}
-                  <option value="{{ y }}" {% if sel_year==y %}selected{% endif %}>{{ y }}</option>
-                  {% endfor %}
-                </select>
 
                 <!-- Stars -->
                 <div class="rating-stars ms-1">
@@ -244,23 +330,26 @@
                   <label for="emp{{ emp.id }}_m{{ sel_month }}_y{{ sel_year }}_star{{ i }}"></label>
                   {% endfor %}
                 </div>
+                <button type="submit" class="btn btn-outline-warning btn-sm"
+                  aria-label="Save rating for {{ emp.empname }}">
+                  Save
+                </button>
               </div>
-
-              <button class="btn btn-sm btn-outline-light mt-1" type="submit">Save</button>
             </form>
             <!-- /Monthly Rating Form -->
           </div>
 
           <div class="px-3 pb-3">
             <div class="d-flex justify-content-between">
-              <a class="btn btn-outline-primary btn-sm" href="{{ url_for('manage_attendance', emp_id=emp.id) }}">
+              <a href="{{ url_for('manage_attendance', emp_id=emp.id) }}" class="btn btn-outline-warning btn-sm"
+                aria-label="Manage attendance for {{ emp.empname }}">
                 Manage Attendance
               </a>
 
               <form class="delete-emp-form d-inline" data-url="{{ url_for('delete_employee', emp_id=emp.id) }}"
                 method="post">
                 {{ delete_form.hidden_tag() }}
-                <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                <button class="btn btn-outline-danger btn-sm" type="submit">Delete Employee</button>
               </form>
             </div>
           </div>
