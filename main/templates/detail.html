@@ -110,11 +110,12 @@
       color: #0a0a0a;
     }
 
-    /* Main container */
-    main.container {
-      margin-left: calc(var(--sidebar-width) + 20px);
-      padding-top: 24px;
-      padding-bottom: 32px;
+    /* Main container (adjusted so it doesn't overflow) */
+    main.container.main-content {
+      margin-left: var(--sidebar-width);
+      padding: 24px 16px 32px;
+      width: calc(100% - var(--sidebar-width));
+      max-width: none; /* override Bootstrap's max-width */
     }
 
     /* Employee card */
@@ -169,8 +170,6 @@
       outline: none;
     }
 
-
-
     /* Rating form */
     .rating_box .form-select {
       background: transparent;
@@ -218,7 +217,6 @@
       color: var(--gold);
     }
 
-
     /* Flash message fade (keeps the script behavior) */
     .flash-message {
       position: fixed;
@@ -249,6 +247,42 @@
         transform: none !important;
       }
     }
+
+    /* Tablet & below: slightly smaller sidebar */
+    @media (max-width: 992px) {
+      :root {
+        --sidebar-width: 170px;
+      }
+
+      main.container.main-content {
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+      }
+    }
+
+    /* Mobile: sidebar on top, content full-width */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 8px rgba(212, 175, 55, .15);
+      }
+
+      .sidebar a {
+        white-space: nowrap;
+      }
+
+      main.container.main-content {
+        margin-left: 0;
+        margin-top: 12px;
+        width: 100%;
+        padding: 16px;
+      }
+    }
   </style>
 </head>
 
@@ -271,7 +305,8 @@
     <a href="{{ url_for('logout') }}" class="logout">Logout</a>
   </aside>
 
-  <main class="container py-4">
+  <!-- added main-content class so width can be controlled -->
+  <main class="container main-content py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h1 style="color: var(--gold);">Employees</h1>
       <a href="{{ url_for('emp_register') }}" class="btn btn-outline-primary">Add Employee</a>
@@ -309,7 +344,6 @@
                   {% endfor %}
                 </select>
 
-
                 <!-- Month -->
                 {% set sel_month = (form.month.data or current_month)|int %}
                 <select name="month" class="form-select form-select-sm w-auto">
@@ -320,11 +354,9 @@
                   {% endfor %}
                 </select>
 
-
                 <!-- Stars -->
                 <div class="rating-stars ms-1">
                   {% for i in range(5, 0, -1) %}
-                  {# unique id per card; using current selected month/year #}
                   <input type="radio" id="emp{{ emp.id }}_m{{ sel_month }}_y{{ sel_year }}_star{{ i }}" name="score"
                     value="{{ i }}">
                   <label for="emp{{ emp.id }}_m{{ sel_month }}_y{{ sel_year }}_star{{ i }}"></label>

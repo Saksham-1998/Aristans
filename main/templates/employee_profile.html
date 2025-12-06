@@ -110,9 +110,12 @@
       color: #0a0a0a;
     }
 
-    main.container {
-      margin-left: calc(var(--sidebar-width) + 16px);
-      padding: 24px 0 32px
+    /* Main content */
+    main.container.main-content {
+      margin-left: var(--sidebar-width);
+      padding: 24px 16px 32px;
+      width: calc(100% - var(--sidebar-width));
+      max-width: none;
     }
 
     .card {
@@ -232,9 +235,8 @@
     .filter_submit {
       border: 1px solid var(--gold);
       border-radius: 5px;
-      background-color:#1a1a1a;
+      background-color: #1a1a1a;
       color: var(--gold);
-
     }
 
     .filter_submit:hover {
@@ -244,6 +246,40 @@
 
     hr {
       border-color: #d4af37;
+    }
+
+    @media (max-width: 992px) {
+      :root {
+        --sidebar-width: 170px;
+      }
+
+      main.container.main-content {
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 8px rgba(212, 175, 55, .15);
+      }
+
+      .sidebar a {
+        white-space: nowrap;
+      }
+
+      main.container.main-content {
+        margin-left: 0;
+        margin-top: 12px;
+        width: 100%;
+        padding: 16px;
+      }
     }
 
     @media (max-width: 575px) {
@@ -267,7 +303,8 @@
     <a href="{{ url_for('logout') }}" class="logout">Logout</a>
   </aside>
 
-  <main class="container py-4">
+  <!-- added main-content class -->
+  <main class="container main-content py-4">
     <h1 class="mb-3" style="color: var(--gold) !important;">Employee Profile</h1>
 
     <div class="card shadow-sm">
@@ -289,10 +326,13 @@
               <span class="stars" aria-label="{{ average_rating|round(2) }} out of 5">
                 {% for i in range(1,6) %}
                 {% if i <= full %}<span class="filled">★</span>{% else %}<span class="empty">★</span>{% endif %}
-              {% endfor %}
+                {% endfor %}
               </span>
-              <small><span style="color: var(--gold); font-weight: 700;">({{ '%.2f'|format(average_rating)
-                  }}/5)</span></small>
+              <small>
+                <span style="color: var(--gold); font-weight: 700;">
+                  ({{ '%.2f'|format(average_rating) }}/5)
+                </span>
+              </small>
               {% else %}
               <em>No ratings yet</em>
               {% endif %}
@@ -353,7 +393,7 @@
         <hr>
 
         <!-- Monthly Ratings -->
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between flex-wrap gap-2">
           <h4 class="mb-2">
             <strong style="color: var(--gold) !important;">
               Monthly Ratings — {{ selected_year }}
@@ -390,7 +430,7 @@
                   <span class="stars" aria-label="{{ r.score }} out of 5">
                     {% for i in range(1,6) %}
                     {% if i <= r.score %}<span class="filled">★</span>{% else %}<span class="empty">★</span>{% endif %}
-                  {% endfor %}
+                    {% endfor %}
                   </span>
                   <small>({{ r.score }}/5)</small>
                 </td>
